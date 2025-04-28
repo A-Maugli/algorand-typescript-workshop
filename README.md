@@ -22,7 +22,7 @@ To test the smart contract, use `algokit -v project run test` or `npm run test`
 
 - added the new param to the call of `deposit` method
 
-## Modification made to  `contract.integration.spec.ts`
+## Modifications made to  `contract.integration.spec.ts`
 
 - added the new param to the call of `deposit` method
 
