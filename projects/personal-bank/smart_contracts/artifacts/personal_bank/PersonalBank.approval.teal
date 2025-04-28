@@ -4,12 +4,12 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0
-    bytecblock "depositors" 0x151f7c75
+    bytecblock "depositors" "appCreatorGitHubUsernamegithub" 0x151f7c75
     // smart_contracts/personal_bank/contract.algo.ts:14
     // export class PersonalBank extends Contract {
     txn NumAppArgs
     bz main_bare_routing@7
-    pushbytess 0x3298e7c0 0x3a395f2b // method "deposit(pay)uint64", method "withdraw()uint64"
+    pushbytess 0xd822ffef 0x3a395f2b // method "deposit(pay,string)uint64", method "withdraw()uint64"
     txna ApplicationArgs 0
     match main_deposit_route@3 main_withdraw_route@4
 
@@ -20,7 +20,7 @@ main_after_if_else@11:
     return
 
 main_withdraw_route@4:
-    // smart_contracts/personal_bank/contract.algo.ts:47
+    // smart_contracts/personal_bank/contract.algo.ts:54
     // @abimethod()
     txn OnCompletion
     !
@@ -29,7 +29,7 @@ main_withdraw_route@4:
     assert // can only call when not creating
     callsub withdraw
     itob
-    bytec_1 // 0x151f7c75
+    bytec_2 // 0x151f7c75
     swap
     concat
     log
@@ -37,7 +37,7 @@ main_withdraw_route@4:
     return
 
 main_deposit_route@3:
-    // smart_contracts/personal_bank/contract.algo.ts:24
+    // smart_contracts/personal_bank/contract.algo.ts:26
     // @abimethod()
     txn OnCompletion
     !
@@ -54,11 +54,13 @@ main_deposit_route@3:
     intc_0 // pay
     ==
     assert // transaction type is pay
-    // smart_contracts/personal_bank/contract.algo.ts:24
+    txna ApplicationArgs 1
+    extract 2 0
+    // smart_contracts/personal_bank/contract.algo.ts:26
     // @abimethod()
     callsub deposit
     itob
-    bytec_1 // 0x151f7c75
+    bytec_2 // 0x151f7c75
     swap
     concat
     log
@@ -77,28 +79,28 @@ main_bare_routing@7:
     return
 
 
-// smart_contracts/personal_bank/contract.algo.ts::PersonalBank.deposit(payTxn: uint64) -> uint64:
+// smart_contracts/personal_bank/contract.algo.ts::PersonalBank.deposit(payTxn: uint64, gitHubUsername: bytes) -> uint64:
 deposit:
-    // smart_contracts/personal_bank/contract.algo.ts:24-25
+    // smart_contracts/personal_bank/contract.algo.ts:26-27
     // @abimethod()
-    // public deposit(payTxn: gtxn.PaymentTxn) {
-    proto 1 1
-    // smart_contracts/personal_bank/contract.algo.ts:26
+    // public deposit(payTxn: gtxn.PaymentTxn, gitHubUsername: string) {
+    proto 2 1
+    // smart_contracts/personal_bank/contract.algo.ts:28
     // assert(payTxn.receiver === Global.currentApplicationAddress, 'Receiver must be the contract address')
-    frame_dig -1
+    frame_dig -2
     gtxns Receiver
     global CurrentApplicationAddress
     ==
     assert // Receiver must be the contract address
-    // smart_contracts/personal_bank/contract.algo.ts:27
+    // smart_contracts/personal_bank/contract.algo.ts:29
     // assert(payTxn.amount > 0, 'Deposit amount must be greater than zero')
-    frame_dig -1
+    frame_dig -2
     gtxns Amount
     dup
     assert // Deposit amount must be greater than zero
-    // smart_contracts/personal_bank/contract.algo.ts:30
+    // smart_contracts/personal_bank/contract.algo.ts:32
     // const isDeposited = this.depositors(payTxn.sender).exists
-    frame_dig -1
+    frame_dig -2
     gtxns Sender
     // smart_contracts/personal_bank/contract.algo.ts:15
     // public depositors = BoxMap<Account, uint64>({ keyPrefix: 'depositors' })
@@ -106,14 +108,14 @@ deposit:
     swap
     concat
     dup
-    // smart_contracts/personal_bank/contract.algo.ts:30
+    // smart_contracts/personal_bank/contract.algo.ts:32
     // const isDeposited = this.depositors(payTxn.sender).exists
     box_len
     bury 1
-    // smart_contracts/personal_bank/contract.algo.ts:32
+    // smart_contracts/personal_bank/contract.algo.ts:34
     // if (isDeposited) {
     bz deposit_else_body@2
-    // smart_contracts/personal_bank/contract.algo.ts:33
+    // smart_contracts/personal_bank/contract.algo.ts:35
     // this.depositors(payTxn.sender).value += depositAmount
     frame_dig 1
     dup
@@ -128,7 +130,33 @@ deposit:
     box_put
 
 deposit_after_if_else@3:
-    // smart_contracts/personal_bank/contract.algo.ts:38
+    // smart_contracts/personal_bank/contract.algo.ts:16
+    // public appCreatorGitHubUsername = BoxMap<string, string>({ keyPrefix: 'appCreatorGitHubUsername' })
+    bytec_1 // "appCreatorGitHubUsernamegithub"
+    // smart_contracts/personal_bank/contract.algo.ts:40
+    // const isAppCreatorGitHubUsernameSet = this.appCreatorGitHubUsername('github').exists
+    box_len
+    bury 1
+    // smart_contracts/personal_bank/contract.algo.ts:41
+    // if (!isAppCreatorGitHubUsernameSet) {
+    bnz deposit_after_if_else@5
+    // smart_contracts/personal_bank/contract.algo.ts:16
+    // public appCreatorGitHubUsername = BoxMap<string, string>({ keyPrefix: 'appCreatorGitHubUsername' })
+    bytec_1 // "appCreatorGitHubUsernamegithub"
+    // smart_contracts/personal_bank/contract.algo.ts:42
+    // this.appCreatorGitHubUsername('github').value = gitHubUsername
+    box_del
+    pop
+    // smart_contracts/personal_bank/contract.algo.ts:16
+    // public appCreatorGitHubUsername = BoxMap<string, string>({ keyPrefix: 'appCreatorGitHubUsername' })
+    bytec_1 // "appCreatorGitHubUsernamegithub"
+    // smart_contracts/personal_bank/contract.algo.ts:42
+    // this.appCreatorGitHubUsername('github').value = gitHubUsername
+    frame_dig -1
+    box_put
+
+deposit_after_if_else@5:
+    // smart_contracts/personal_bank/contract.algo.ts:45
     // return this.depositors(payTxn.sender).value
     frame_dig 1
     box_get
@@ -140,7 +168,7 @@ deposit_after_if_else@3:
     retsub
 
 deposit_else_body@2:
-    // smart_contracts/personal_bank/contract.algo.ts:35
+    // smart_contracts/personal_bank/contract.algo.ts:37
     // this.depositors(payTxn.sender).value = depositAmount
     frame_dig 0
     itob
@@ -155,22 +183,22 @@ withdraw:
     // smart_contracts/personal_bank/contract.algo.ts:15
     // public depositors = BoxMap<Account, uint64>({ keyPrefix: 'depositors' })
     bytec_0 // "depositors"
-    // smart_contracts/personal_bank/contract.algo.ts:49
+    // smart_contracts/personal_bank/contract.algo.ts:56
     // const [depositedAmount, isDeposited] = this.depositors(Txn.sender).maybe()
     txn Sender
     // smart_contracts/personal_bank/contract.algo.ts:15
     // public depositors = BoxMap<Account, uint64>({ keyPrefix: 'depositors' })
     concat
-    // smart_contracts/personal_bank/contract.algo.ts:49
+    // smart_contracts/personal_bank/contract.algo.ts:56
     // const [depositedAmount, isDeposited] = this.depositors(Txn.sender).maybe()
     box_get
     swap
     btoi
-    // smart_contracts/personal_bank/contract.algo.ts:50
+    // smart_contracts/personal_bank/contract.algo.ts:57
     // assert(isDeposited, 'No deposits found for this account')
     swap
     assert // No deposits found for this account
-    // smart_contracts/personal_bank/contract.algo.ts:52-58
+    // smart_contracts/personal_bank/contract.algo.ts:59-65
     // const result = itxn
     //   .payment({
     //     receiver: Txn.sender,
@@ -179,12 +207,12 @@ withdraw:
     //   })
     //   .submit()
     itxn_begin
-    // smart_contracts/personal_bank/contract.algo.ts:54
+    // smart_contracts/personal_bank/contract.algo.ts:61
     // receiver: Txn.sender,
     txn Sender
     itxn_field Receiver
     itxn_field Amount
-    // smart_contracts/personal_bank/contract.algo.ts:52-57
+    // smart_contracts/personal_bank/contract.algo.ts:59-64
     // const result = itxn
     //   .payment({
     //     receiver: Txn.sender,
@@ -193,11 +221,11 @@ withdraw:
     //   })
     intc_0 // 1
     itxn_field TypeEnum
-    // smart_contracts/personal_bank/contract.algo.ts:56
+    // smart_contracts/personal_bank/contract.algo.ts:63
     // fee: 0,
     intc_1 // 0
     itxn_field Fee
-    // smart_contracts/personal_bank/contract.algo.ts:52-58
+    // smart_contracts/personal_bank/contract.algo.ts:59-65
     // const result = itxn
     //   .payment({
     //     receiver: Txn.sender,
@@ -210,17 +238,17 @@ withdraw:
     // smart_contracts/personal_bank/contract.algo.ts:15
     // public depositors = BoxMap<Account, uint64>({ keyPrefix: 'depositors' })
     bytec_0 // "depositors"
-    // smart_contracts/personal_bank/contract.algo.ts:60
+    // smart_contracts/personal_bank/contract.algo.ts:67
     // this.depositors(Txn.sender).value = 0
     txn Sender
     // smart_contracts/personal_bank/contract.algo.ts:15
     // public depositors = BoxMap<Account, uint64>({ keyPrefix: 'depositors' })
     concat
-    // smart_contracts/personal_bank/contract.algo.ts:60
+    // smart_contracts/personal_bank/contract.algo.ts:67
     // this.depositors(Txn.sender).value = 0
     intc_1 // 0
     itob
     box_put
-    // smart_contracts/personal_bank/contract.algo.ts:62
+    // smart_contracts/personal_bank/contract.algo.ts:69
     // return result.amount
     retsub

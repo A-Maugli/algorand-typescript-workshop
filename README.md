@@ -1,22 +1,46 @@
 # algorand-typescript-workshop
 
-Welcome to your new AlgoKit project!
+28-Apr-2025
 
-This is your workspace root. A `workspace` in AlgoKit is an orchestrated collection of standalone projects (backends, smart contracts, frontend apps and etc).
+Astha Yadav, Marco Podien
 
-By default, `projects_root_path` parameter is set to `projects`. Which instructs AlgoKit CLI to create a new directory under `projects` directory when new project is instantiated via `algokit init` at the root of the workspace.
+This repository is the clone of `https://github.com/algorand-devrel/algorand-typescript-workshop`
 
-## Getting Started
+Open the workspace, go to `personal-bank`
 
-To get started refer to `README.md` files in respective sub-projects in the `projects` directory.
+To build the smart contract, use `algokit -v project run build` or `npm run build`
 
-To learn more about algokit, visit [documentation](https://github.com/algorandfoundation/algokit-cli/blob/main/docs/algokit.md).
+To test the smart contract, use `algokit -v project run test` or `npm run test`
 
-### GitHub Codespaces
+## Modifications made to `personal-bank/contract.algo.ts`
 
-To get started execute:
+- added a new box, named `appCreatorGitHubUsername`
 
-1. `algokit generate devcontainer` - invoking this command from the root of this repository will create a `devcontainer.json` file with all the configuration needed to run this project in a GitHub codespace. [Run the repository inside a codespace](https://docs.github.com/en/codespaces/getting-started/quickstart) to get started.
-2. `algokit init` - invoke this command inside a github codespace to launch an interactive wizard to guide you through the process of creating a new AlgoKit project
+- modified `deposit` method, to store `gitHubUsername` param value in the `appCreatorGitHubUsername` box with key `github`
 
-Powered by [Copier templates](https://copier.readthedocs.io/en/stable/).
+## Modifications made to `contract.spec.ts`
+
+- added the new param to the call of `deposit` method
+
+## Modification made to  `contract.integration.spec.ts`
+
+- added the new param to the call of `deposit` method
+
+- read back and checked the values of the boxes
+
+## New file
+
+- `boxUtils.ts`, to make box handling more easy
+
+## Notes
+
+- when you use LORA App Lab to call the `deposit` method, press "Populate Resources" before "Send"
+
+- before you use LORA App Lab to call the `withdraw` method, send the Minimum Balance required for the boxes to the SC address, otherwise the method call fails with "Balance too low". E.g., send 1 Algo to the SC address.
+
+- when you use LORA App Lab to call the `withdraw` method, unclick "Set fees automatically", and set the fee to 0.002 Algo, otherwise you the method call fails with "Fee too low"
+
+- when you use LORA App Lab to examine the `depositors` box value, using "App Lab | State | Box | depositors View",
+LORA gives an error message: "Error: byte string must correspond to an uint64". This is a LORA error. Instead, the box value as an uint64 should be displayed.
+
+- when you use LORA App Lab to examine the `appCreatorGitHubUsername` box value, using "App Lab | State | Box | appCreatorGitHubUsername View", LORA displays an icorrect value. This is a LORA error.

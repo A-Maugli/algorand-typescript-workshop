@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { PersonalBank } from './contract.algo'
 
 describe('PersonalBank contract', () => {
+  const gitHubUsername = 'a-maugli'
   const context = new TestExecutionContext()
   it('Deposits funds into the contract', () => {
     // Arrange
@@ -15,7 +16,7 @@ describe('PersonalBank contract', () => {
     })
 
     // Act
-    const output = contract.deposit(depositTxn)
+    const output = contract.deposit(depositTxn, gitHubUsername)
 
     console.log('output', output)
     console.log('depositAmount', depositAmount)
@@ -34,7 +35,7 @@ describe('PersonalBank contract', () => {
     })
 
     // Act
-    contract.deposit(depositTxn)
+    contract.deposit(depositTxn, gitHubUsername)
     const output = contract.withdraw()
 
     console.log('output', output)

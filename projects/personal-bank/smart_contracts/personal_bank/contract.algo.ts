@@ -13,16 +13,18 @@ import {
 
 export class PersonalBank extends Contract {
   public depositors = BoxMap<Account, uint64>({ keyPrefix: 'depositors' })
+  public appCreatorGitHubUsername = BoxMap<string, string>({ keyPrefix: 'appCreatorGitHubUsername' })
 
   /**
    * Deposits funds into the personal bank.
    * The deposit amount is recorded in the sender's BoxMap.
    * If the sender already has a deposit, the amount is added to their existing balance.
    * @param payTxn - The payment transaction containing deposit information
+   * @param gitHubUsername - The GitHub username of the payment sender, e.g. "hexacat"
    * @returns The total amount deposited by the sender after this transaction
    */
   @abimethod()
-  public deposit(payTxn: gtxn.PaymentTxn) {
+  public deposit(payTxn: gtxn.PaymentTxn, gitHubUsername: string) {
     assert(payTxn.receiver === Global.currentApplicationAddress, 'Receiver must be the contract address')
     assert(payTxn.amount > 0, 'Deposit amount must be greater than zero')
 
@@ -33,6 +35,11 @@ export class PersonalBank extends Contract {
       this.depositors(payTxn.sender).value += depositAmount
     } else {
       this.depositors(payTxn.sender).value = depositAmount
+    }
+
+    const isAppCreatorGitHubUsernameSet = this.appCreatorGitHubUsername('github').exists
+    if (!isAppCreatorGitHubUsernameSet) {
+      this.appCreatorGitHubUsername('github').value = gitHubUsername
     }
 
     return this.depositors(payTxn.sender).value
