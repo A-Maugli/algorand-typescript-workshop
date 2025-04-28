@@ -8,6 +8,8 @@ This repository is forked from `https://github.com/algorand-devrel/algorand-type
 
 Open the workspace, go to `projects/personal-bank`
 
+To install dependencies, use `algokit -v project bootstrap all` or `npm install`
+
 To build the smart contract, use `algokit -v project run build` or `npm run build`
 
 To test the smart contract, use `algokit -v project run test` or `npm run test`
