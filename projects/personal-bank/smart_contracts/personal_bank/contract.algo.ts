@@ -26,7 +26,6 @@ export class PersonalBank extends Contract {
    */
   @abimethod()
   public deposit(payTxn: gtxn.PaymentTxn, gitHubUsername: string) {
-  public deposit(payTxn: gtxn.PaymentTxn, gitHubUsername: string) {
     assert(payTxn.receiver === Global.currentApplicationAddress, 'Receiver must be the contract address')
     assert(payTxn.amount > 0, 'Deposit amount must be greater than zero')
 
