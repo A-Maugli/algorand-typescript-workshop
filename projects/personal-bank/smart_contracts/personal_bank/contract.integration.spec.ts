@@ -12,6 +12,7 @@ const VERBOSE_LOGS = true;
 
 describe('personal bank contract', () => {
   const gitHubUsername = 'a-maugli'
+  const gitHubUsername = 'a-maugli'
   const localnet = algorandFixture()
   beforeAll(() => {
     Config.configure({
@@ -99,6 +100,7 @@ describe('personal bank contract', () => {
       amount: AlgoAmount.Algos(1),
     })
 
+    await client.send.deposit({ args: { payTxn, gitHubUsername }, populateAppCallResources: true })
     await client.send.deposit({ args: { payTxn, gitHubUsername }, populateAppCallResources: true })
 
     // Act

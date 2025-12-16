@@ -1,6 +1,7 @@
 {
     "hints": {
         "deposit(pay,string)uint64": {
+        "deposit(pay,string)uint64": {
             "call_config": {
                 "no_op": "CALL"
             }
@@ -45,6 +46,11 @@
                         "type": "pay",
                         "name": "payTxn",
                         "desc": "- The payment transaction containing deposit information"
+                    },
+                    {
+                        "type": "string",
+                        "name": "gitHubUsername",
+                        "desc": "- The GitHub username of the payment sender, e.g. \"hexacat\""
                     },
                     {
                         "type": "string",

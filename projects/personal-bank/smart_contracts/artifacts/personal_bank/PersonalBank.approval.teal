@@ -4,7 +4,7 @@
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
     intcblock 1 0
-    bytecblock "depositors" "github " 0x151f7c75
+    bytecblock "depositors" 0x151f7c75
     // smart_contracts/personal_bank/contract.algo.ts:14
     // export class PersonalBank extends Contract {
     txn NumAppArgs
@@ -54,18 +54,7 @@ main_deposit_route@3:
     intc_0 // pay
     ==
     assert // transaction type is pay
-    txna ApplicationArgs 1
-    dup
-    intc_1 // 0
-    extract_uint16 // on error: invalid array length header
-    pushint 2 // 2
-    +
-    dig 1
-    len
-    ==
-    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
-    extract 2 0
-    // smart_contracts/personal_bank/contract.algo.ts:26
+    // smart_contracts/personal_bank/contract.algo.ts:24
     // @abimethod()
     callsub deposit
     itob
@@ -137,33 +126,7 @@ deposit:
     box_put
 
 deposit_after_if_else@3:
-    // smart_contracts/personal_bank/contract.algo.ts:16
-    // public github = BoxMap<string, string>({ keyPrefix: 'github' })
-    bytec_1 // "github "
-    // smart_contracts/personal_bank/contract.algo.ts:40
-    // const isAppCreatorGitHubUsernameSet = this.github(' ').exists
-    box_len
-    bury 1
-    // smart_contracts/personal_bank/contract.algo.ts:41
-    // if (!isAppCreatorGitHubUsernameSet) {
-    bnz deposit_after_if_else@5
-    // smart_contracts/personal_bank/contract.algo.ts:16
-    // public github = BoxMap<string, string>({ keyPrefix: 'github' })
-    bytec_1 // "github "
-    // smart_contracts/personal_bank/contract.algo.ts:42
-    // this.github(' ').value = gitHubUsername
-    box_del
-    pop
-    // smart_contracts/personal_bank/contract.algo.ts:16
-    // public github = BoxMap<string, string>({ keyPrefix: 'github' })
-    bytec_1 // "github "
-    // smart_contracts/personal_bank/contract.algo.ts:42
-    // this.github(' ').value = gitHubUsername
-    frame_dig -1
-    box_put
-
-deposit_after_if_else@5:
-    // smart_contracts/personal_bank/contract.algo.ts:45
+    // smart_contracts/personal_bank/contract.algo.ts:38
     // return this.depositors(payTxn.sender).value
     frame_dig 1
     box_get

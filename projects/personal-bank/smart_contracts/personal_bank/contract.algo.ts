@@ -21,9 +21,11 @@ export class PersonalBank extends Contract {
    * If the sender already has a deposit, the amount is added to their existing balance.
    * @param payTxn - The payment transaction containing deposit information
    * @param gitHubUsername - The GitHub username of the payment sender, e.g. "hexacat"
+   * @param gitHubUsername - The GitHub username of the payment sender, e.g. "hexacat"
    * @returns The total amount deposited by the sender after this transaction
    */
   @abimethod()
+  public deposit(payTxn: gtxn.PaymentTxn, gitHubUsername: string) {
   public deposit(payTxn: gtxn.PaymentTxn, gitHubUsername: string) {
     assert(payTxn.receiver === Global.currentApplicationAddress, 'Receiver must be the contract address')
     assert(payTxn.amount > 0, 'Deposit amount must be greater than zero')
